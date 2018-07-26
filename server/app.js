@@ -7,7 +7,7 @@ var dotenv = require('dotenv').config();
 var cors = require('cors');
 
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost:27017/todo_fancy', { useNewUrlParser: true });
+mongoose.connect('mongodb://amel:amel22@ds119436.mlab.com:19436/todo-fancy', { useNewUrlParser: true });
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
