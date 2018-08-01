@@ -1,0 +1,22 @@
+#logo{
+    margin-left: 50px;
+}
+
+
+
+body, html {
+    height: 100%;
+    background-repeat: no-repeat;
+    background-image: linear-gradient( #FFEDBC, #ED4264)
+}
+
+#categories{
+    background-color: white;
+    margin-left: 50px;
+}
+
+#category-title{
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 15px
+}
