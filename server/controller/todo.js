@@ -34,7 +34,7 @@ class Todos{
             .then(user => {
                 User.update({_id: user[0].id},{$push: {todo_list: todos._id}})
                 .then(result => {
-                    res.status(200).json('Todo is successfully added')
+                    res.status(200).json({msg: 'Todo is successfully added', todo: todos})
                 })
                 .catch(err => {
                     console.log('error di update')
