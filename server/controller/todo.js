@@ -84,11 +84,11 @@ class Todos{
     }
 
     static changeStatus(req,res){
-        Todo.updateOne({_id: req.paramsid},{
+        Todo.update({_id: req.params.id},{
             status: 'Done'
         })
         .then(result => {
-            res.status(200).json('Todo Done')
+            res.status(200).json('Done')
         })
         .catch(err => {
             res.status(500).json(err.message)
