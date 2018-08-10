@@ -60,21 +60,24 @@ export default new Vuex.Store({
             text: 'Login Success',
             icon: 'success'
           })
+
           let account = {
             name: result.user.displayName,
             email: result.user.email,
             password: result.user.displayName
           }
+          
           axios
             .post('http://35.240.171.58/users/loginfb', account)
-            .then(response => {
+          })
+          .then(response => {
               console.log(response)
               localStorage.setItem('token', response.data.token)
               router.push('/dashboard')
             })
-            .catch(err => {})
-
-        })
+            .catch(err => {
+              
+            })
         .catch(function(error) {
           var errorCode = error.code
           var errorMessage = error.message
