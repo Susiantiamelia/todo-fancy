@@ -3,6 +3,7 @@ API Documentation for Todo Fancy API
 
 ### REST API
 List of users routes:
+
 | Route                                          | HTTP   | Request                                                | Description                                           |
 |------------------------------------------------|--------|--------------------------------------------------------|-------------------------------------------------------|
 | `http://localhost:3000/users/register`         | POST   | Body: - fullname - username - email - password         | Make a user Account                                   |
@@ -14,6 +15,7 @@ List of users routes:
 
 
 List of todo routes: 
+
 | Route                                                 | HTTP   | Request                                                                | Description                      |
 |-------------------------------------------------------|--------|------------------------------------------------------------------------|----------------------------------|
 | `http://localhost:3000/users/todos/add`               | POST   | Headers: - token (you will get token after login)  Body: - date - todo | POST to adding task on Todo List |
