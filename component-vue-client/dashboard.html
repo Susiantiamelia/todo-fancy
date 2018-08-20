@@ -14,10 +14,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.26.11/sweetalert2.all.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.26.11/sweetalert2.min.js"></script>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Caveat" rel="stylesheet">
+
 </head>
 <body>
   <div id="app">
     <navbar @editprofile="editprofile" @logout="logout"></navbar>
+    <div class="container">
+      <div style="display: flex; justify-content: center">
+        <div class="card">
+          <p id="quote">{{ quote }}</p>
+        </div>
+      </div>
+    </div>
     <div class="container">
         <br>
         <h4>Todo List</h4>
@@ -35,6 +44,11 @@
     h4{
       text-align: center
     }
+    #quote{
+      font-family: 'Caveat', cursive;
+      font-size: 22px;
+      text-align: center
+    }
   </style>
   
   <script src="./components/task-list.js"></script>
@@ -49,10 +63,23 @@
         username: '',
         email: '',
         todos: '',
-        id: ''
+        id: '',
+        quote: ''
       }
     },
     methods: {
+      getQuote() {
+        console.log('disini niiiih')
+        axios.get('https://talaikis.com/api/quotes/random/', {})
+        .then(response => {
+          let quote = response.data.quote
+          this.quote = quote
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
+      },
+
       editprofile(){
         swal({
           title: 'Profile',
@@ -253,6 +280,7 @@
       if(token){
         this.profile()
         this.allTodo()
+        this.getQuote()
       } else {
         window.location.href="index.html"
       }

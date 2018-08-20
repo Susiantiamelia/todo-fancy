@@ -26,7 +26,7 @@ Vue.component('login', {
               <button class="btn waves-effect waves-light" type="submit" name="action" @click="dataLogin">LOGIN</button>
             </div>
             <div class="container" id="log-with-fb">
-              <button class="btn waves-effect waves-light" type="submit" name="action">LOGIN WITH FACEBOOK</button>
+              <button class="btn waves-effect waves-light" type="submit" name="action" @click="fb">LOGIN WITH FACEBOOK</button>
             </div>
             <a href="regist.html"><small>Don't have an account? Click here</small></a>
             <br>
@@ -53,6 +53,9 @@ Vue.component('login', {
         uname_email: this.uname_email,
         password: this.password
       })
+    },
+    fb(){
+      this.$emit('fb', 'fb')
     }
   }
 })
