@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/navbar.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Merienda" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.26.11/sweetalert2.all.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.26.11/sweetalert2.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+</head>
+<body>
+  <div id="app">
+    <navbar @editprofile="editprofile" @logout="logout"></navbar>
+    <div class="container">
+        <br>
+        <h4>Todo List</h4>
+        <br>
+        <tasklist :todos="todos" @editTodo="editTodo" @doneTodo="doneTodo" @delTodo="delTodo"></tasklist>
+    </div>
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+        <button class="btn-floating btn-large red" @click="addTodo">
+          <i class="material-icons">add</i>
+        </button>
+    </div>
+  </div>
+
+  <style>
+    h4{
+      text-align: center
+    }
+  </style>
+  
+  <script src="./components/task-list.js"></script>
+  <script src="./components/Navbar.js"></script>
+
+  <script>
+  let app = new Vue({
+    el: '#app',
+    data(){
+      return{
+        fullname: '',
+        username: '',
+        email: '',
+        todos: '',
+        id: ''
+      }
+    },
+    methods: {
+      editprofile(){
+        swal({
+          title: 'Profile',
+          html: 
+          `<label for="fullname">Name:</label>`+
+          `<input id="fullname" class="swal2-input" type="text" value="${this.fullname}">` +
+          `<label for="username">Username:</label>`+
+          `<input id="username" class="swal2-input" type="text" value="${this.username}">`+
+          `<label for="email">Email:</label>`+
+          `<input id="email" class="swal2-input" type="text" value="${this.email}">`,
+          focusConfirm: false,
+          preConfirm: () => {
+            let input = {
+                  name: document.getElementById('fullname').value,
+                  username: document.getElementById('username').value,
+                  email: document.getElementById('email').value,
+                }
+
+            axios.post(`http://35.240.171.58/users/edit-profile${this._id}`, input)
+            .then(result => {
+              this.profile()
+            })
+            .catch(err => {
+              swal({
+                title: `${err.message}`,
+                type: "error",
+              });
+            })
+          }
+        })
+      },
+
+      profile (context) {
+        axios.get("http://35.240.171.58/users/profile", {
+          headers: {
+            token: localStorage.getItem('token')
+                  }
+        })
+        .then(profile => {
+          let user = profile.data.user[0]
+          this.fullname = user.full_name
+          this.username = user.username
+          this.email = user.email
+          this.id = user._id
+          console.log(user)
+        })
+      },
+
+      logout(){
+        localStorage.removeItem('token')
+        window.location.href="index.html"
+      },
+
+      allTodo (context) {
+        axios.get('http://35.240.171.58/users/todos/all', {
+          headers: {
+              token: localStorage.getItem('token')
+          }
+        })
+          .then(todos => {
+            this.todos = todos.data
+          })
+      },
+
+      editTodo (data){
+        console.log(data.estimated_date)
+        swal({
+          title: 'Edit Your Activity',
+          html:
+            `<label for="todo">Task:</label>`+
+            `<input id="todo" class="swal2-input" type="text" value="${data.todo}"> `+
+            `<label for="date">Estimated Date:</label>`+
+            `<input id="date" class="swal2-input" type="date" value="${data.estimated_date}">`,
+          focusConfirm: false,
+          preConfirm: () => {
+            let input = {
+              todo: document.getElementById('todo').value,
+              date: document.getElementById('date').value
+            }
+
+              axios.put(`http://35.240.171.58/users/todos/update/${data._id}`, {
+                todo: input.todo,
+                estimated_date: input.date
+              })
+              .then(result => {
+                this.allTodo()
+                swal({
+                  title: "Success updated todo",
+                  type: "success",
+                });
+              })
+              .catch(err => {
+                swal({
+                    title: `${err.message}`,
+                    type: "error",
+                });
+            })
+          }
+        })
+      },
+
+      doneTodo(i){
+        let todo = this.todos[i]
+
+        axios.put(`http://35.240.171.58/users/todos/change-status/${todo._id}`)
+        .then(result => {
+          this.allTodo()
+          swal({
+            title: "Task Done",
+            type: "success",
+          });
+        })
+        .catch(err => {
+          swal({
+            title: `${err.message}`,
+            type: "error",
+        });
+        })
+      },
+
+      delTodo (id) {
+        swal({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        })
+        .then( (result) => {
+          
+          if(result.value) {
+            axios.delete(`http://35.240.171.58/users/todos/delete/${id}`, {
+              headers: {
+                token: localStorage.getItem('token')
+              }
+            })
+            .then(success => {
+              this.allTodo()
+              swal(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+                )
+            })
+            .catch(err => {
+              swal({
+                title: `${err.message}`,
+                type: "error",
+            });
+            })
+          }
+        })
+      },
+
+      addTodo() {
+        swal({
+          title: 'Add Your Task',
+          html: 
+            `<label for="todo">Task:</label>`+
+            `<input id="todo" class="swal2-input" type="text"> `+
+            `<label for="date">Estimated Date:</label>`+
+            `<input id="date" class="swal2-input" type="date">`,
+            focusConfirm: false,
+          preConfirm: () => {
+            let input = {
+              todo: document.getElementById('todo').value,
+              date: document.getElementById('date').value
+            }
+            axios.post('http://35.240.171.58/users/todos/add', input,{
+                headers: {
+                  token: localStorage.getItem('token')
+                }
+            })
+            .then( result => {
+                this.allTodo()
+                swal({
+                  title: result.data.msg,
+                  type: "success",
+                });
+            })
+            .catch(err => {
+              swal({
+                title: `${err.message}`,
+                type: "error",
+              });
+            })
+          }
+        })
+        
+
+        
+      },      
+    },
+    created() {
+      let token = localStorage.getItem('token')
+      if(token){
+        this.profile()
+        this.allTodo()
+      } else {
+        window.location.href="index.html"
+      }
+      
+    },
+
+  })
+  </script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+</body>
+</html>

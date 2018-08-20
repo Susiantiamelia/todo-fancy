@@ -1,0 +1,17 @@
+nav{
+  background-color: white !important
+}
+.btn-flat{
+  margin-bottom: 40px;
+  color: grey !important;
+}
+
+#profile{
+  color: grey !important
+}
+
+.brand-logo{
+  color: black !important;
+  font-size: 17px !important;
+  margin-left: 50px
+}

@@ -215,7 +215,7 @@ export default new Vuex.Store({
         confirmButtonText: 'Yes, delete it!'
       })
       .then( (result) => {
-        ;
+        
         if(result.value) {
           console.log('masuk nih', id)
           axios.delete(`http://35.240.171.58/users/todos/delete/${id}`, {

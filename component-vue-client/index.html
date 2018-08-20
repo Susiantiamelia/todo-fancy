@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/login.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Merienda" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+<body>
+  <div id="app">
+    <login :error="error" @data-login="login"></login>
+  </div>
+
+  <style>
+    #app{
+      height: 100vh;
+      background-image: linear-gradient(#859398,#283048)
+    }
+
+    
+  </style>
+
+  <script src="./components/login.js"></script>
+
+  <script>
+    let app = new Vue({
+      el: '#app',
+      data(){
+        return {
+          error: ''
+        }
+      },
+      methods: {
+        login(value){
+          console.log(value);
+          
+          axios.post('http://35.240.171.58/users/login',value, {})
+            .then(response => {
+              let token = response.data.token
+              localStorage.setItem('token', token)
+              window.location.href="dashboard.html"
+            })
+            .catch(err => {
+              this.error = 'Please put correct username / password'
+            })
+        }
+      },
+      created() {
+        let token = localStorage.getItem('token') || false
+        if(token){
+          window.location.href="dashboard.html"
+        }
+      },
+    })
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+</body>
+</html>

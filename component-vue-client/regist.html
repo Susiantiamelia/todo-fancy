@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/regist.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Merienda" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+<body>
+  <div id="app">
+     <registcard :error="error" @data-regist="register"></registcard>
+  </div>
+
+  <style>
+    #app{
+      height: 100vh;
+      background-image: linear-gradient(#859398,#283048)
+    }
+    
+  </style>
+
+  <script src="./components/regist.js"></script>
+
+  <script>
+  let app = new Vue({
+    el: '#app',
+    data(){
+      return{
+        error: ''
+      }
+    },
+    methods: {
+      register(value){
+        axios.post('http://35.240.171.58/users/register', value, {})
+        .then(response => {
+          console.log(response)
+          window.location.href="index.html"
+        })
+        .catch(err => {
+          this.error = err.response.data
+        })
+      }
+    },
+    created() {
+      let token =localStorage.getItem('token')
+      if(token){
+        window.location.href="dashboard.html"
+      }
+      },
+  })
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+</body>
+</html>

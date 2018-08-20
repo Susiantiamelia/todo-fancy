@@ -1,0 +1,35 @@
+h5{
+  font-family: 'Merienda', cursive !important;
+  color: white;
+  text-align: center
+  }
+
+  .row .col{
+    background-color: white !important
+  }
+
+  #login{
+    color: #2c3e50 !important;
+    font-size: 20px
+  }
+  .input-field .col .s12{
+    padding-bottom: 30px !important
+  }
+
+  .btn{
+    width: 100%;
+    background-color: grey !important
+  }
+
+  #submit{
+    margin-top: 60px;
+    margin-bottom: 30px
+  }
+  
+  #box{
+    margin-left: 72vh !important;
+  }
+
+  #error{
+    text-align: center
+  }
