@@ -116,7 +116,7 @@
         axios.get("http://35.240.171.58/users/profile", {
           headers: {
             token: localStorage.getItem('token')
-                  }
+          }
         })
         .then(profile => {
           let user = profile.data.user[0]
